@@ -20,13 +20,17 @@ class Mem < Formula
     bin.install_symlink libexec/"bin/mem"
   end
 
+  def post_install
+    zshrc = Pathname.new(Dir.home)/".zshrc"
+    hook = 'eval "$(mem init zsh)"'
+    unless zshrc.exist? && zshrc.read.include?(hook)
+      zshrc.append_text("\n# mem — shell history memory\n#{hook}\n")
+    end
+  end
+
   def caveats
     <<~EOS
-      To activate mem, add this to your ~/.zshrc:
-
-        eval "$(mem init zsh)"
-
-      Then reload your shell:
+      Done! Reload your shell to activate:
 
         source ~/.zshrc
     EOS
