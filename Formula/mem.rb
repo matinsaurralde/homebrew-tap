@@ -11,11 +11,12 @@ class Mem < Formula
   depends_on "python@3.12"
 
   def install
-    python3 = "python3.12"
+    python3 = Formula["python@3.12"].opt_bin/"python3.12"
     venv = virtualenv_create(libexec, python3)
-    # Use pip directly so it can fetch binary wheels for Rust extensions (pydantic-core).
+    # Use pip with --python flag to allow binary wheels for Rust extensions (pydantic-core).
     # Homebrew's venv.pip_install forces --no-binary :all: which requires a Rust toolchain.
-    system libexec/"bin/pip", "install", "click", "rich", "pydantic"
+    system python3, "-m", "pip", "--python=#{libexec}/bin/python",
+           "install", "click", "rich", "pydantic"
     venv.pip_install buildpath
     bin.install_symlink libexec/"bin/mem"
   end
