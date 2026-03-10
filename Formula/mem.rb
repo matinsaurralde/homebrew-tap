@@ -13,6 +13,7 @@ class Mem < Formula
   def install
     python3 = "python3.12"
     venv = virtualenv_create(libexec, python3)
+    venv.pip_install "pydantic-core"
     venv.pip_install "click"
     venv.pip_install "rich"
     venv.pip_install "pydantic"
@@ -22,10 +23,11 @@ class Mem < Formula
 
   def caveats
     <<~EOS
-      Run one of these to activate, then restart your shell:
+      Run one of these and restart your terminal:
 
-        echo 'eval "$(mem init zsh)"' >> ~/.zshrc
-        echo 'eval "$(mem init bash)"' >> ~/.bashrc
+        echo 'eval "$(mem init zsh)"' >> ~/.zshrc && source ~/.zshrc
+
+        echo 'eval "$(mem init bash)"' >> ~/.bashrc && source ~/.bashrc
     EOS
   end
 
