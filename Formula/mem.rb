@@ -22,13 +22,10 @@ class Mem < Formula
 
   def caveats
     <<~EOS
-      Add to your shell config and restart:
+      Run one of these to activate, then restart your shell:
 
-        # zsh (~/.zshrc)
-        eval "$(mem init zsh)"
-
-        # bash (~/.bashrc)
-        eval "$(mem init bash)"
+        echo 'eval "$(mem init zsh)"' >> ~/.zshrc
+        echo 'eval "$(mem init bash)"' >> ~/.bashrc
     EOS
   end
 
