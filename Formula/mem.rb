@@ -1,4 +1,6 @@
 class Mem < Formula
+  include Language::Python::Virtualenv
+
   desc "Privacy-first CLI that turns shell history into searchable memory"
   homepage "https://github.com/matinsaurralde/mem"
   url "https://github.com/matinsaurralde/mem/archive/refs/tags/v0.1.0.tar.gz"
