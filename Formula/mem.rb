@@ -16,9 +16,16 @@ class Mem < Formula
     # Install deps without Rust extensions first
     system python3, "-m", "pip", "--python=#{libexec}/bin/python",
            "install", "click", "rich"
+    # Install apple-fm-sdk from pre-built wheel for on-device AI features.
+    # The SDK's source tarball fails metadata generation inside Homebrew's
+    # sandbox, so we host a pre-built wheel in the tap's GitHub Releases.
+    if OS.mac?
+      system python3, "-m", "pip", "--python=#{libexec}/bin/python",
+             "install", "https://github.com/matinsaurralde/homebrew-tap/releases/download/deps/apple_fm_sdk-0.1.1-py3-none-any.whl"
+    end
     # Install mem without pulling pydantic (installed in post_install)
     system python3, "-m", "pip", "--python=#{libexec}/bin/python",
-           "install", "--no-deps", buildpath.to_s
+           "install", "--no-deps", "--force-reinstall", buildpath.to_s
     bin.install_symlink libexec/"bin/mem"
   end
 
@@ -28,13 +35,6 @@ class Mem < Formula
     python3 = Formula["python@3.12"].opt_bin/"python3.12"
     system python3, "-m", "pip", "--python=#{libexec}/bin/python",
            "install", "--quiet", "pydantic"
-    # Optional: install apple-fm-sdk for on-device AI features (macOS only).
-    # Uses quiet_system to avoid aborting when the SDK can't install
-    # (sandbox restrictions, non-Apple-Silicon, missing Apple Intelligence).
-    if OS.mac?
-      quiet_system python3, "-m", "pip", "--python=#{libexec}/bin/python",
-                   "install", "--quiet", "apple-fm-sdk"
-    end
   end
 
   def caveats
