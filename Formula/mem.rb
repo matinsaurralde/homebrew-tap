@@ -10,19 +10,24 @@ class Mem < Formula
 
   depends_on "python@3.12"
 
-  # Prevent Homebrew from rewriting dylib IDs in the virtualenv —
-  # pydantic-core's Rust extension has a too-small Mach-O header.
-  skip_clean "libexec"
-
   def install
     python3 = Formula["python@3.12"].opt_bin/"python3.12"
     venv = virtualenv_create(libexec, python3)
-    # Use pip with --python flag to allow binary wheels for Rust extensions (pydantic-core).
-    # Homebrew's venv.pip_install forces --no-binary :all: which requires a Rust toolchain.
+    # Install deps without Rust extensions first
     system python3, "-m", "pip", "--python=#{libexec}/bin/python",
-           "install", "click", "rich", "pydantic"
-    venv.pip_install buildpath
+           "install", "click", "rich"
+    # Install mem without pulling pydantic (installed in post_install)
+    system python3, "-m", "pip", "--python=#{libexec}/bin/python",
+           "install", "--no-deps", buildpath.to_s
     bin.install_symlink libexec/"bin/mem"
+  end
+
+  def post_install
+    # Install pydantic after Homebrew's relocation step to avoid
+    # dylib header rewriting failures with pydantic-core's Rust extension.
+    python3 = Formula["python@3.12"].opt_bin/"python3.12"
+    system python3, "-m", "pip", "--python=#{libexec}/bin/python",
+           "install", "--quiet", "pydantic"
   end
 
   def caveats
