@@ -28,10 +28,13 @@ class Mem < Formula
     python3 = Formula["python@3.12"].opt_bin/"python3.12"
     system python3, "-m", "pip", "--python=#{libexec}/bin/python",
            "install", "--quiet", "pydantic"
-    # Install apple-fm-sdk for on-device AI pattern extraction (macOS only).
-    # Fails gracefully on non-Apple-Silicon Macs; mem falls back to heuristics.
-    system python3, "-m", "pip", "--python=#{libexec}/bin/python",
-           "install", "--quiet", "apple-fm-sdk" if OS.mac?
+    # Optional: install apple-fm-sdk for on-device AI features (macOS only).
+    # Uses quiet_system to avoid aborting when the SDK can't install
+    # (sandbox restrictions, non-Apple-Silicon, missing Apple Intelligence).
+    if OS.mac?
+      quiet_system python3, "-m", "pip", "--python=#{libexec}/bin/python",
+                   "install", "--quiet", "apple-fm-sdk"
+    end
   end
 
   def caveats
