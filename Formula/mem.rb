@@ -3,8 +3,8 @@ class Mem < Formula
 
   desc "Privacy-first CLI that turns shell history into searchable memory"
   homepage "https://github.com/matinsaurralde/mem"
-  url "https://github.com/matinsaurralde/mem/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "e389c5e14c4af136729b4b41ab1ba14eb144968de6b11de98e98b4a4b1bf7093"
+  url "https://github.com/matinsaurralde/mem/archive/refs/tags/v0.3.1.tar.gz"
+  sha256 "7a021daaf764ff0b3563766375ae11e4f0a064fa030802d8c3141879e1ba0292"
   license "MIT"
   head "https://github.com/matinsaurralde/mem.git", branch: "master"
 
